@@ -46,3 +46,34 @@ body {
     @apply bg-primary-brown text-white font-semibold px-8 py-3 rounded-full hover:bg-primary-dark hover:scale-105 transform transition-all duration-300 shadow-lg;
   }
 }
+
+/* Toast animations */
+@keyframes toast-slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-toast-slide-in {
+  animation: toast-slide-in 0.3s ease-out;
+}
+
+.animate-toast-fade-in {
+  animation: toast-fade-in 0.3s ease-out;
+}

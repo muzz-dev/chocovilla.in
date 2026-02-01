@@ -4,6 +4,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingSocialBar from "@/components/FloatingSocialBar";
 import PageTransition from "@/components/PageTransition";
+import { CartProvider } from "@/contexts/CartContext";
+import { ToastProvider } from "@/contexts/ToastContext";
+import ToastContainer from "@/components/ToastContainer";
 
 export const metadata: Metadata = {
   title: "ChocoVilla - Premium, Imported & International Chocolates",
@@ -58,14 +61,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased">
-        <Navbar />
-        <main className="min-h-screen">
-          <PageTransition>
-            {children}
-          </PageTransition>
-        </main>
-        <Footer />
-        <FloatingSocialBar />
+        <ToastProvider>
+          <CartProvider>
+            <Navbar />
+            <main className="min-h-screen">
+              <PageTransition>
+                {children}
+              </PageTransition>
+            </main>
+            <Footer />
+            <FloatingSocialBar />
+            <ToastContainer />
+          </CartProvider>
+        </ToastProvider>
       </body>
     </html>
   );

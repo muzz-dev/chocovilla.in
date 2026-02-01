@@ -4,10 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
+import { useCart } from "@/contexts/CartContext";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { getTotalItems } = useCart();
 
   // Helper function to check if link is active
   const isActive = (path: string) => pathname === path;
@@ -71,6 +73,26 @@ export default function Navbar() {
               </Link>
             ))}
             
+            {/* Cart Icon */}
+            <Link
+              href="/cart"
+              className="ml-4 p-2.5 rounded-full bg-primary-gold/10 text-primary-gold hover:bg-primary-gold hover:text-primary-dark transition-all duration-400 transform hover:scale-110 group relative"
+              aria-label="View shopping cart"
+              title="Shopping Cart"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+              {/* Cart badge */}
+              {getTotalItems() > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center min-w-[20px]">
+                  {getTotalItems() > 99 ? '99+' : getTotalItems()}
+                </span>
+              )}
+              {/* Glow effect on hover */}
+              <span className="absolute inset-0 bg-primary-gold/30 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-400"></span>
+            </Link>
+
             {/* Instagram Icon */}
             <a
               href="https://www.instagram.com/chocovilla.in"
@@ -133,6 +155,24 @@ export default function Navbar() {
                 <span className="font-medium text-base tracking-wide">{link.name}</span>
               </Link>
             ))}
+
+            {/* Mobile Cart Link */}
+            <Link
+              href="/cart"
+              className="block px-4 py-3 rounded-lg transition-all duration-300 transform hover:translate-x-2 text-white hover:bg-primary-gold/10 hover:text-primary-gold border-l-4 border-transparent"
+              onClick={() => setIsOpen(false)}
+              style={{
+                animationDelay: '200ms',
+                animation: isOpen ? 'slideIn 0.3s ease-out forwards' : 'none'
+              }}
+            >
+              <span className="font-medium text-base tracking-wide flex items-center">
+                <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                Cart {getTotalItems() > 0 && `(${getTotalItems()})`}
+              </span>
+            </Link>
           </div>
         </div>
       </div>

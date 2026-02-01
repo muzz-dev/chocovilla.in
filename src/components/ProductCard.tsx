@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/contexts/ToastContext";
 
 interface Product {
   id: string;
@@ -21,10 +23,24 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const [imageError, setImageError] = useState(false);
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
+  const { addToCart } = useCart();
+  const { addToast } = useToast();
   
   // WhatsApp message with product name and our price
   const whatsappMessage = `Hello ChocoVilla, I am interested in ${product.name} priced at ₹${product.ourPrice}. Please share details.`;
   const whatsappUrl = `https://wa.me/919825947680?text=${encodeURIComponent(whatsappMessage)}`;
+
+  // Handle add to cart
+  const handleAddToCart = () => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      ourPrice: product.ourPrice,
+    });
+
+    // Show success toast
+    addToast('Added to cart successfully!', 'success', 2500);
+  };
 
   // Fallback image if product image fails to load
   const fallbackImage = "https://images.unsplash.com/photo-1548907040-4baa42d10919?w=800&h=600&fit=crop";
@@ -95,14 +111,22 @@ export default function ProductCard({ product }: ProductCardProps) {
             )}
           </div>
           
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full text-center bg-primary-gold text-primary-dark font-semibold px-6 py-3 rounded-full hover:bg-yellow-500 transition-all duration-300 hover:scale-105 transform shadow-md"
-          >
-            Order on WhatsApp
-          </a>
+          <div className="flex gap-3">
+            <button
+              onClick={handleAddToCart}
+              className="flex-1 bg-primary-brown text-white font-semibold px-4 py-3 rounded-full hover:bg-primary-dark transition-all duration-300 hover:scale-105 transform shadow-md"
+            >
+              Add to Cart
+            </button>
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 text-center bg-primary-gold text-primary-dark font-semibold px-4 py-3 rounded-full hover:bg-yellow-500 transition-all duration-300 hover:scale-105 transform shadow-md"
+            >
+              Order Now
+            </a>
+          </div>
         </div>
       </div>
 
