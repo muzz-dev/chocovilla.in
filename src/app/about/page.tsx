@@ -38,7 +38,7 @@ export default function About() {
               </p>
               <p className="text-lg text-gray-700 leading-relaxed mb-4">
                 Every piece that leaves our atelier is a testament to our unwavering commitment 
-                to quality, innovation, and the timeless art of chocolate making. We don't just 
+                to quality, innovation, and the timeless art of chocolate making. We don&apos;t just 
                 make chocolates—we craft edible memories.
               </p>
             </div>

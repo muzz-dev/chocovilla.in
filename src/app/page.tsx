@@ -46,7 +46,7 @@ export default async function Home() {
               Welcome to <span className="text-gradient">ChocoVilla</span>
             </h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              At ChocoVilla, we believe that chocolate is more than just a sweet treat—it's an experience, 
+              At ChocoVilla, we believe that chocolate is more than just a sweet treat—it&apos;s an experience, 
               a moment of pure indulgence. Each piece is meticulously handcrafted by our master chocolatiers 
               using only the finest ingredients sourced from around the world.
             </p>

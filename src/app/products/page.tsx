@@ -60,7 +60,7 @@ export default async function Products() {
             <div className="max-w-2xl mx-auto bg-primary-cream border border-primary-gold rounded-lg p-12 text-center">
               <h3 className="text-2xl font-bold text-primary-brown mb-4">No Products Available</h3>
               <p className="text-gray-600 mb-6">
-                We're updating our collection. Please check back soon!
+                We&apos;re updating our collection. Please check back soon!
               </p>
               <a
                 href="https://wa.me/919825947680?text=Hello%20ChocoVilla%2C%20I%20would%20like%20to%20know%20about%20available%20products."
@@ -92,8 +92,8 @@ export default async function Products() {
               How to Order
             </h3>
             <p className="text-gray-700 mb-4">
-              Simply click the "Order Now" button on any product to chat with us on WhatsApp. 
-              We'll confirm your order details, arrange payment, and ensure fresh delivery to your doorstep.
+              Simply click the &quot;Order Now&quot; button on any product to chat with us on WhatsApp. 
+              We&apos;ll confirm your order details, arrange payment, and ensure fresh delivery to your doorstep.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-left">
               <div className="flex items-start gap-3">
@@ -123,7 +123,7 @@ export default async function Products() {
       <section className="py-20 px-4 bg-gradient-to-r from-primary-brown to-primary-dark text-white">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
-            Can't Decide? <span className="text-gradient">We Can Help!</span>
+            Can&apos;t Decide? <span className="text-gradient">We Can Help!</span>
           </h2>
           <p className="text-xl text-gray-300 mb-8">
             Chat with our chocolate experts on WhatsApp for personalized recommendations
