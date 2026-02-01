@@ -14,6 +14,10 @@ interface Product {
   imageUrl: string;
   category: string;
   bestSeller: boolean;
+  inStock: boolean;
+  limitedStock: boolean;
+  displayOrder: number;
+  showOnHome: boolean;
 }
 
 interface ProductCardProps {
@@ -30,8 +34,18 @@ export default function ProductCard({ product }: ProductCardProps) {
   const whatsappMessage = `Hello ChocoVilla, I am interested in ${product.name} priced at ₹${product.ourPrice}. Please share details.`;
   const whatsappUrl = `https://wa.me/919825947680?text=${encodeURIComponent(whatsappMessage)}`;
 
+  // Notify me WhatsApp message for out-of-stock products
+  const notifyMessage = `Hello ChocoVilla 👋
+Please notify me when ${product.name} is back in stock.`;
+  const notifyWhatsappUrl = `https://wa.me/919825947680?text=${encodeURIComponent(notifyMessage)}`;
+
   // Handle add to cart
   const handleAddToCart = () => {
+    if (!product.inStock) {
+      addToast('This product is currently out of stock', 'error', 3000);
+      return;
+    }
+
     addToCart({
       id: product.id,
       name: product.name,
@@ -48,12 +62,12 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <>
-      <div className="group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+      <div className={`group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 ${!product.inStock ? 'opacity-75 cursor-not-allowed' : ''}`}>
         {/* Product Image */}
         <div 
-          className="relative h-64 bg-gray-200 overflow-hidden cursor-pointer"
-          onClick={() => setIsImageViewerOpen(true)}
-          title="Click to view full image"
+          className={`relative h-64 bg-gray-200 overflow-hidden ${product.inStock ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+          onClick={() => product.inStock && setIsImageViewerOpen(true)}
+          title={product.inStock ? "Click to view full image" : "Product out of stock"}
         >
           {/* Best Seller Badge */}
           {product.bestSeller && (
@@ -63,12 +77,29 @@ export default function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
 
+          {/* Limited Stock Badge */}
+          {product.limitedStock && product.inStock && (
+            <div className="absolute top-3 right-3 z-10 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 text-sm font-bold">
+              <span className="text-base">⏳</span>
+              <span>Limited Stock</span>
+            </div>
+          )}
+
+          {/* Out of Stock Badge */}
+          {!product.inStock && (
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
+              <div className="bg-red-600 text-white px-4 py-2 rounded-lg font-bold text-lg shadow-lg">
+                OUT OF STOCK
+              </div>
+            </div>
+          )}
+
           {product.imageUrl && !imageError ? (
             <Image
               src={product.imageUrl}
               alt={product.name}
               fill
-              className="object-cover group-hover:scale-110 transition-transform duration-500"
+              className={`object-cover group-hover:scale-110 transition-transform duration-500 ${!product.inStock ? 'opacity-50' : ''}`}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               onError={() => setImageError(true)}
             />
@@ -77,7 +108,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               src={fallbackImage}
               alt={product.name}
               fill
-              className="object-cover group-hover:scale-110 transition-transform duration-500"
+              className={`object-cover group-hover:scale-110 transition-transform duration-500 ${!product.inStock ? 'opacity-50' : ''}`}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           )}
@@ -112,20 +143,36 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
           
           <div className="flex gap-3">
-            <button
-              onClick={handleAddToCart}
-              className="flex-1 bg-primary-brown text-white font-semibold px-4 py-3 rounded-full hover:bg-primary-dark transition-all duration-300 hover:scale-105 transform shadow-md"
-            >
-              Add to Cart
-            </button>
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 text-center bg-primary-gold text-primary-dark font-semibold px-4 py-3 rounded-full hover:bg-yellow-500 transition-all duration-300 hover:scale-105 transform shadow-md"
-            >
-              Order Now
-            </a>
+            {product.inStock ? (
+              <>
+                <button
+                  onClick={handleAddToCart}
+                  className="flex-1 px-4 py-3 rounded-full font-semibold transition-all duration-300 transform bg-primary-brown text-white hover:bg-primary-dark hover:scale-105 shadow-md"
+                  aria-label={`Add ${product.name} to cart`}
+                >
+                  Add to Cart
+                </button>
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 text-center px-4 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 transform shadow-md bg-primary-gold text-primary-dark hover:bg-yellow-500"
+                  aria-label={`Order ${product.name} on WhatsApp`}
+                >
+                  Order Now
+                </a>
+              </>
+            ) : (
+              <a
+                href={notifyWhatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full text-center px-4 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 transform shadow-md bg-green-600 text-white hover:bg-green-700"
+                aria-label={`Get notified when ${product.name} is back in stock`}
+              >
+                📱 Notify me when available
+              </a>
+            )}
           </div>
         </div>
       </div>

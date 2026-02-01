@@ -16,15 +16,64 @@ This guide explains how to set up Google Sheets as the product backend for Choco
 2. Create a new spreadsheet named "ChocoVilla Products"
 3. Set up the first row (header) with these exact column names:
    ```
-   id | name | description | price | image_url
+   id,name,description,market_price,our_price,image_url,category,best_seller,limited_stock,in_stock,display_order,show_on_home
    ```
+
+### Column Details:
+- **id**: Unique product identifier (number)
+- **name**: Product name
+- **description**: Product description
+- **market_price**: Original price (optional, can be empty)
+- **our_price**: Your selling price (required)
+- **image_url**: Google Drive image URL
+- **category**: Product category (e.g., "Bars", "Truffles", "Gift Boxes")
+- **best_seller**: YES/NO (shows star badge)
+- **limited_stock**: YES/NO (shows limited stock warning badge)
+- **in_stock**: YES/NO (controls availability)
+- **display_order**: Numeric priority (1, 2, 3... lower = higher priority)
+- **show_on_home**: YES/NO (shows product on homepage featured section)
 
 ### Example Data:
 
-| id | name | description | price | image_url |
-|----|------|-------------|-------|-----------|
-| 1 | Dark Chocolate Truffles | Rich and velvety dark chocolate truffles | 599 | https://drive.google.com/uc?export=view&id=YOUR_FILE_ID |
-| 2 | Milk Chocolate Pralines | Smooth milk chocolate with hazelnut | 549 | https://drive.google.com/uc?export=view&id=YOUR_FILE_ID |
+| id | name | description | market_price | our_price | image_url | category | best_seller | limited_stock | in_stock | display_order | show_on_home |
+|----|------|-------------|--------------|-----------|-----------|----------|-------------|---------------|----------|---------------|--------------|
+| 1 | Dark Chocolate Truffles | Rich and velvety dark chocolate truffles made with 70% premium cocoa | 599 | 499 | https://drive.google.com/uc?export=view&id=YOUR_FILE_ID | Truffles | YES | NO | YES | 1 | YES |
+| 2 | Milk Chocolate Pralines | Smooth milk chocolate pralines with hazelnut filling | 549 | 499 | https://drive.google.com/uc?export=view&id=YOUR_FILE_ID | Pralines | NO | YES | YES | 2 | YES |
+| 3 | Caramel Sea Salt Dark | Dark chocolate with gourmet caramel and sea salt | 699 | 649 | https://drive.google.com/uc?export=view&id=YOUR_FILE_ID | Bars | NO | NO | YES | 3 | YES |
+| 4 | White Chocolate Raspberry | Delicate white chocolate infused with real raspberry essence | 649 | 599 | https://drive.google.com/uc?export=view&id=YOUR_FILE_ID | Bars | NO | NO | YES | 4 | NO |
+
+### Display Priority Logic:
+- **display_order**: Lower numbers appear first (1 = highest priority)
+- **show_on_home**: Only products with YES appear in homepage featured section
+- Homepage shows first 3 products where `show_on_home = YES` (ordered by display_order)
+
+### Stock Status Logic:
+- **Available**: `in_stock = YES` + `limited_stock = NO` → Normal product
+- **Limited Stock**: `in_stock = YES` + `limited_stock = YES` → Shows warning badge
+- **Out of Stock**: `in_stock = NO` → Shows "Notify me" button
+
+---
+
+## 🔄 Updating Existing Sheets
+
+If you have an existing Google Sheet with the old format (8 columns), you need to add the new columns:
+
+### Old Format (8 columns):
+```
+id,name,description,market_price,our_price,image_url,category,best_seller
+```
+
+### New Format (10 columns):
+```
+id,name,description,market_price,our_price,image_url,category,best_seller,limited_stock,in_stock
+```
+
+### How to Update:
+1. Open your existing Google Sheet
+2. Insert two new columns after `best_seller`
+3. Name them `limited_stock` and `in_stock`
+4. Fill with YES/NO values as needed
+5. **Important**: The app will automatically work with both old and new formats!
 
 ---
 
@@ -77,6 +126,42 @@ https://docs.google.com/spreadsheets/d/SHEET_ID_HERE/edit
 ```
 
 Copy the `SHEET_ID_HERE` part.
+
+---
+
+## 🎫 Step 4: Set Up Promo Codes (Optional)
+
+Create a second sheet named "Promo_Codes" in your spreadsheet for discount codes:
+
+### Promo_Codes Sheet Setup:
+
+1. In your Google Sheet, create a new sheet tab named "Promo_Codes"
+2. Set up the first row (header) with these exact column names:
+   ```
+   code,active,discount_percent,min_order_amount,expiry_date,description
+   ```
+
+### Column Details:
+- **code**: Promo code string (case-insensitive)
+- **active**: YES/NO (controls if code can be used)
+- **discount_percent**: Number 0-100 (percentage discount)
+- **min_order_amount**: Minimum cart subtotal required (0 = no minimum)
+- **expiry_date**: YYYY-MM-DD format (leave empty for no expiry)
+- **description**: Description shown to users
+
+### Example Promo Codes:
+
+| code | active | discount_percent | min_order_amount | expiry_date | description |
+|------|--------|------------------|------------------|-------------|-------------|
+| THALAFORAREASON | YES | 7 | 999 | 2026-12-31 | Special offer |
+| WELCOME10 | YES | 10 | 499 |  | New customer offer |
+| OLDPROMO | NO | 20 | 0 | 2024-12-31 | Expired |
+
+### Promo Code Logic:
+- **Validation Order**: Code exists → Active → Not expired → Minimum order met
+- **Discount**: `(subtotal × discount_percent) / 100`
+- **Error Messages**: Specific messages for each validation failure
+- **One Code Per Cart**: Only one promo code can be applied at a time
 
 ---
 

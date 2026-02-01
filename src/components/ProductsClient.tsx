@@ -14,6 +14,10 @@ interface Product {
   imageUrl: string;
   category: string;
   bestSeller: boolean;
+  inStock: boolean;
+  limitedStock: boolean;
+  displayOrder: number;
+  showOnHome: boolean;
 }
 
 interface ProductsClientProps {

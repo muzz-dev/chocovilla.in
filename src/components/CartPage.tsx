@@ -4,9 +4,20 @@ import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/contexts/ToastContext';
 import Link from 'next/link';
 import Image from 'next/image';
+import PromoCodeInput from '@/components/PromoCodeInput';
 
 export default function CartPage() {
-  const { items, updateQuantity, removeFromCart, getTotalItems, getTotalPrice, clearCart } = useCart();
+  const {
+    items,
+    appliedPromo,
+    updateQuantity,
+    removeFromCart,
+    getTotalItems,
+    getSubtotal,
+    getDiscount,
+    getTotalPrice,
+    clearCart
+  } = useCart();
   const { addToast } = useToast();
 
   const generateWhatsAppMessage = () => {
@@ -18,7 +29,18 @@ export default function CartPage() {
       message += `${item.name} × ${item.quantity} – ₹${item.ourPrice * item.quantity}\n`;
     });
 
-    message += `\nTotal Items: ${getTotalItems()}\nTotal Amount: ₹${getTotalPrice()}\n\nPlease confirm availability and delivery details.`;
+    const subtotal = getSubtotal();
+    const discount = getDiscount();
+    const finalTotal = getTotalPrice();
+
+    message += `\nSubtotal: ₹${subtotal}`;
+
+    if (appliedPromo) {
+      message += `\nPromo Code: ${appliedPromo.code} (${appliedPromo.discountPercent}% OFF)`;
+      message += `\nDiscount: – ₹${discount}`;
+    }
+
+    message += `\nFinal Total: ₹${finalTotal}\n\nPlease confirm availability and delivery details.`;
 
     return message;
   };
@@ -118,17 +140,31 @@ export default function CartPage() {
           </div>
         </div>
 
+        {/* Promo Code Section */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          <h2 className="text-xl font-semibold text-primary-brown mb-4">Promo Code</h2>
+          <PromoCodeInput />
+        </div>
+
         {/* Order Summary */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
           <h2 className="text-xl font-semibold text-primary-brown mb-4">Order Summary</h2>
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="flex justify-between">
-              <span>Total Items:</span>
-              <span className="font-semibold">{getTotalItems()}</span>
+              <span>Subtotal ({getTotalItems()} item{getTotalItems() !== 1 ? 's' : ''}):</span>
+              <span>₹{getSubtotal().toLocaleString()}</span>
             </div>
-            <div className="flex justify-between text-lg font-bold border-t pt-2">
-              <span>Total Amount:</span>
-              <span className="text-primary-gold">₹{getTotalPrice()}</span>
+
+            {appliedPromo && (
+              <div className="flex justify-between text-green-600">
+                <span>Promo Code ({appliedPromo.code} - {appliedPromo.discountPercent}% OFF):</span>
+                <span>– ₹{getDiscount().toLocaleString()}</span>
+              </div>
+            )}
+
+            <div className="flex justify-between text-lg font-bold border-t pt-3">
+              <span>Final Total:</span>
+              <span className="text-primary-gold">₹{getTotalPrice().toLocaleString()}</span>
             </div>
           </div>
         </div>
