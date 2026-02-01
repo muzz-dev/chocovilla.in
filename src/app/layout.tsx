@@ -6,8 +6,8 @@ import FloatingSocialBar from "@/components/FloatingSocialBar";
 import PageTransition from "@/components/PageTransition";
 
 export const metadata: Metadata = {
-  title: "ChocoVilla - Premium Chocolate | Imported & International Chocolates Online",
-  description: "Buy premium chocolate, imported chocolate, and international chocolate online at ChocoVilla. Handcrafted luxury chocolates with worldwide flavors. Order via WhatsApp for fresh delivery.",
+  title: "ChocoVilla - Premium, Imported & International Chocolates",
+  description: "Shop premium, imported and international chocolates including gift hampers and best sellers. Order directly on WhatsApp from ChocoVilla.",
   keywords: [
     "premium chocolate",
     "imported chocolate",
@@ -37,8 +37,8 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "ChocoVilla - Premium Chocolate | Imported & International Chocolates",
-    description: "Buy premium chocolate, imported chocolate, and international chocolate online. Handcrafted luxury chocolates delivered fresh.",
+    title: "ChocoVilla - Premium, Imported & International Chocolates",
+    description: "Shop premium, imported and international chocolates including gift hampers and best sellers. Order directly on WhatsApp from ChocoVilla.",
     type: "website",
     locale: "en_IN",
     siteName: "ChocoVilla",

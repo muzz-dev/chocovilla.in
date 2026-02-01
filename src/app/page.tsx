@@ -7,8 +7,8 @@ import StatsSection from "@/components/StatsSection";
 import { getFeaturedProducts, getTestimonialsFromSheet, Product, Testimonial } from "@/lib/googleSheets";
 
 export const metadata: Metadata = {
-  title: "Premium Chocolate Online | Imported & International Chocolates - ChocoVilla",
-  description: "Shop premium chocolate, imported chocolate, and international chocolate online at ChocoVilla. Luxury handcrafted chocolates from around the world. Free delivery on orders via WhatsApp.",
+  title: "ChocoVilla - Premium, Imported & International Chocolates",
+  description: "Discover premium imported and international chocolates at ChocoVilla. Perfect for gifting and celebrations. Order easily on WhatsApp.",
   keywords: [
     "premium chocolate online",
     "imported chocolate",
@@ -84,7 +84,7 @@ export default async function Home() {
       <section className="relative bg-gradient-to-br from-primary-brown via-primary-dark to-black text-white py-32 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
-            Premium, Imported & <span className="text-gradient">International Chocolates</span>
+            Indulge in Premium <span className="text-gradient">International Chocolates</span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
             Shop the finest premium chocolate, imported chocolates, and international chocolate brands online. Handcrafted luxury chocolates from around the world.
