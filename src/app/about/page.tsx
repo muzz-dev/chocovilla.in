@@ -2,8 +2,20 @@ import type { Metadata } from "next";
 import Button from "@/components/Button";
 
 export const metadata: Metadata = {
-  title: "About Us - ChocoVilla",
-  description: "Learn about ChocoVilla's story, mission, and commitment to crafting premium artisan chocolates with the finest ingredients.",
+  title: "About ChocoVilla | Premium Chocolate Brand | Imported & International Chocolates",
+  description: "Discover ChocoVilla's journey in bringing premium chocolate, imported chocolates, and international chocolate brands to India. Learn about our commitment to luxury artisan chocolate craftsmanship.",
+  keywords: [
+    "premium chocolate brand",
+    "imported chocolate supplier",
+    "international chocolate India",
+    "luxury chocolate brand",
+    "artisan chocolate maker",
+    "premium chocolate story"
+  ],
+  openGraph: {
+    title: "About ChocoVilla | Premium, Imported & International Chocolate Brand",
+    description: "Learn about ChocoVilla's commitment to premium, imported & international chocolates.",
+  },
 };
 
 export default function About() {

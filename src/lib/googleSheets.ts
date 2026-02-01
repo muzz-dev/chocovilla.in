@@ -5,8 +5,18 @@ export interface Product {
   id: string;
   name: string;
   description: string;
-  price: number;
+  marketPrice: number;
+  ourPrice: number;
   imageUrl: string;
+  category: string;
+  bestSeller: boolean;
+}
+
+export interface Testimonial {
+  name: string;
+  message: string;
+  rating: number;
+  city: string;
 }
 
 interface SheetResponse {
@@ -82,7 +92,8 @@ export async function getProductsFromSheet(): Promise<Product[]> {
   }
 
   // Sheet range - assumes data starts from A1 with headers in first row
-  const range = 'Sheet1!A:E'; // Columns: id, name, description, price, image_url
+  // Columns: id, name, description, market_price, our_price, image_url, category, best_seller
+  const range = 'Sheet1!A:H';
 
   // Build Google Sheets API v4 URL
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
@@ -125,27 +136,39 @@ export async function getProductsFromSheet(): Promise<Product[]> {
     // Skip header row (first row) and map to Product objects
     const products: Product[] = data.values.slice(1).map((row, index) => {
       // Ensure we have all required columns
-      const [id, name, description, priceStr, imageUrl] = row;
+      const [id, name, description, marketPriceStr, ourPriceStr, imageUrl, category, bestSellerStr] = row;
 
-      // Validate required fields
-      if (!id || !name || !priceStr) {
+      // Validate required fields (id, name, ourPrice are required)
+      if (!id || !name || !ourPriceStr) {
         console.warn(`Row ${index + 2} is missing required fields, skipping`);
         return null;
       }
 
-      // Parse price
-      const price = parseFloat(priceStr);
-      if (isNaN(price)) {
-        console.warn(`Row ${index + 2} has invalid price: ${priceStr}, skipping`);
+      // Parse our price (required)
+      const ourPrice = parseFloat(ourPriceStr);
+      if (isNaN(ourPrice)) {
+        console.warn(`Row ${index + 2} has invalid ourPrice: ${ourPriceStr}, skipping`);
         return null;
       }
+
+      // Parse market price (optional, can be 0 or missing)
+      const marketPrice = marketPriceStr ? parseFloat(marketPriceStr) : 0;
+
+      // Parse best seller flag (optional, defaults to false)
+      // Accepts: "true", "yes", "1", "TRUE", "YES" as true
+      const bestSeller = bestSellerStr ? 
+        ['true', 'yes', '1'].includes(bestSellerStr.toLowerCase().trim()) : 
+        false;
 
       return {
         id: id.trim(),
         name: name.trim(),
         description: description?.trim() || '',
-        price,
+        marketPrice: isNaN(marketPrice) ? 0 : marketPrice,
+        ourPrice,
         imageUrl: convertGoogleDriveUrl(imageUrl?.trim() || ''),
+        category: category?.trim() || 'Uncategorized',
+        bestSeller,
       };
     }).filter((product): product is Product => product !== null);
 
@@ -163,4 +186,102 @@ export async function getProductsFromSheet(): Promise<Product[]> {
 export async function getFeaturedProducts(): Promise<Product[]> {
   const allProducts = await getProductsFromSheet();
   return allProducts.slice(0, 3);
+}
+
+/**
+ * Fetches testimonial data from Google Sheets API v4
+ * @returns Array of Testimonial objects where featured = YES
+ * @throws Error if API key or Sheet ID is missing, or if fetch fails
+ */
+export async function getTestimonialsFromSheet(): Promise<Testimonial[]> {
+  const apiKey = process.env.GOOGLE_API_KEY;
+  const sheetId = process.env.GOOGLE_SHEET_ID;
+
+  // Validate environment variables
+  if (!apiKey) {
+    throw new Error('GOOGLE_API_KEY environment variable is not set');
+  }
+
+  if (!sheetId) {
+    throw new Error('GOOGLE_SHEET_ID environment variable is not set');
+  }
+
+  // Sheet range - assumes data starts from A1 with headers in first row
+  // Columns: name, message, rating, city, featured
+  const range = 'Testimonials!A:E';
+
+  // Build Google Sheets API v4 URL
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
+
+  try {
+    const response = await fetch(url, {
+      // Revalidate every 60 seconds (or adjust as needed)
+      next: { revalidate: 60 },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('Google Sheets API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorData,
+        sheetId,
+      });
+      
+      if (response.status === 403) {
+        throw new Error(
+          `Google Sheets API access denied (403). Please ensure:\n` +
+          `1. Google Sheets API is enabled in your Google Cloud project\n` +
+          `2. The spreadsheet (ID: ${sheetId}) is shared as "Anyone with the link can view"\n` +
+          `3. Your API key has access to Google Sheets API`
+        );
+      }
+      
+      throw new Error(`Google Sheets API error: ${response.status} ${response.statusText}`);
+    }
+
+    const data: SheetResponse = await response.json();
+
+    // Handle empty sheet
+    if (!data.values || data.values.length <= 1) {
+      console.warn('Testimonials sheet is empty or has only headers');
+      return [];
+    }
+
+    // Skip header row (first row) and map to Testimonial objects
+    const testimonials: Testimonial[] = data.values.slice(1).map((row, index) => {
+      // Ensure we have all required columns
+      const [name, message, ratingStr, city, featured] = row;
+
+      // Only include if featured = YES (case insensitive)
+      if (!featured || featured.toLowerCase().trim() !== 'yes') {
+        return null;
+      }
+
+      // Validate required fields
+      if (!name || !message || !ratingStr) {
+        console.warn(`Testimonial row ${index + 2} is missing required fields, skipping`);
+        return null;
+      }
+
+      // Parse rating (1-5)
+      const rating = parseInt(ratingStr, 10);
+      if (isNaN(rating) || rating < 1 || rating > 5) {
+        console.warn(`Testimonial row ${index + 2} has invalid rating: ${ratingStr}, skipping`);
+        return null;
+      }
+
+      return {
+        name: name.trim(),
+        message: message.trim(),
+        rating,
+        city: city?.trim() || '',
+      };
+    }).filter((testimonial): testimonial is Testimonial => testimonial !== null);
+
+    return testimonials;
+  } catch (error) {
+    console.error('Failed to fetch testimonials from Google Sheets:', error);
+    throw error;
+  }
 }

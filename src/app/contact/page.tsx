@@ -4,6 +4,9 @@ import type { Metadata } from "next";
 import { useState } from "react";
 import Button from "@/components/Button";
 
+// Note: Metadata export doesn't work in client components, 
+// so SEO is handled in layout.tsx. For client components, we add structured data directly.
+
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: "",
@@ -134,6 +137,19 @@ Message: ${formData.message}`;
               <h2 className="text-3xl font-bold text-primary-brown mb-6">Contact Information</h2>
               
               <div className="space-y-6">
+                {/* Founder */}
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-primary-gold rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-6 h-6 text-primary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-primary-brown mb-1">Founder</h3>
+                    <p className="text-gray-700">Aaishama Muzammil Nagariya</p>
+                  </div>
+                </div>
+
                 {/* Phone */}
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-primary-gold rounded-full flex items-center justify-center flex-shrink-0">
@@ -156,7 +172,7 @@ Message: ${formData.message}`;
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-primary-brown mb-1">Email</h3>
-                    <p className="text-gray-700">info@chocovilla.com</p>
+                    <p className="text-gray-700">info.chocovilla@gmail.com</p>
                   </div>
                 </div>
 

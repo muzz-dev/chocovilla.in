@@ -1,10 +1,25 @@
 import type { Metadata } from "next";
-import ProductCard from "@/components/ProductCard";
+import ProductsClient from "@/components/ProductsClient";
 import { getProductsFromSheet, Product } from "@/lib/googleSheets";
 
 export const metadata: Metadata = {
-  title: "Products - ChocoVilla",
-  description: "Browse our exquisite collection of premium handcrafted chocolates. Order directly via WhatsApp for fresh delivery.",
+  title: "Premium Chocolate Products | Imported & International Chocolates - ChocoVilla",
+  description: "Browse premium chocolate products including imported chocolates and international chocolate brands. Shop luxury artisan chocolates, dark chocolate, milk chocolate, and gourmet gift boxes. Order online via WhatsApp.",
+  keywords: [
+    "premium chocolate products",
+    "imported chocolate brands",
+    "international chocolate collection",
+    "luxury chocolate online",
+    "premium dark chocolate",
+    "premium milk chocolate",
+    "imported chocolate India",
+    "international gourmet chocolate",
+    "premium chocolate gift boxes"
+  ],
+  openGraph: {
+    title: "Premium Chocolate Products | Imported & International Chocolates",
+    description: "Browse our collection of premium, imported & international chocolates. Shop luxury chocolates online.",
+  },
 };
 
 export default async function Products() {
@@ -19,70 +34,57 @@ export default async function Products() {
     error = err instanceof Error ? err.message : "Failed to load products";
     products = [];
   }
+
   return (
     <div>
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-brown via-primary-dark to-black text-white py-24 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            Our <span className="text-gradient">Collection</span>
+            Premium, Imported & <span className="text-gradient">International Chocolates</span>
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Explore our handcrafted chocolate creations, each one a masterpiece of flavor and artistry
+            Browse our luxury collection of premium chocolates, imported chocolate brands, and international gourmet chocolates. Search, filter by category, and order instantly via WhatsApp.
           </p>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-primary-cream to-transparent"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent"></div>
       </section>
 
-      {/* Products Grid */}
-      <section className="py-20 px-4 bg-primary-cream">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary-brown mb-4">
-              Premium Chocolate Selection
-            </h2>
-            <p className="text-lg text-gray-600">
-              Click "Order Now" on any product to place your order via WhatsApp
-            </p>
+      {/* Error State */}
+      {error && (
+        <section className="py-20 px-4 bg-primary-cream">
+          <div className="max-w-2xl mx-auto bg-red-50 border border-red-200 rounded-lg p-8 text-center">
+            <p className="text-red-800 mb-2 font-semibold">Failed to Load Products</p>
+            <p className="text-red-600 text-sm mb-4">{error}</p>
+            <p className="text-gray-600 text-sm">Please check your Google Sheets configuration and try again.</p>
           </div>
+        </section>
+      )}
 
-          {/* Error State */}
-          {error && (
-            <div className="max-w-2xl mx-auto mb-8 bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-              <p className="text-red-800 mb-2 font-semibold">Failed to Load Products</p>
-              <p className="text-red-600 text-sm">{error}</p>
-              <p className="text-gray-600 text-sm mt-2">Please check your Google Sheets configuration and try again.</p>
-            </div>
-          )}
+      {/* Empty State */}
+      {!error && products.length === 0 && (
+        <section className="py-20 px-4 bg-primary-cream">
+          <div className="max-w-2xl mx-auto bg-white border border-primary-gold rounded-lg p-12 text-center">
+            <h3 className="text-2xl font-bold text-primary-brown mb-4">No Products Available</h3>
+            <p className="text-gray-600 mb-6">
+              We&apos;re updating our collection. Please check back soon!
+            </p>
+            <a
+              href="https://wa.me/919825947680?text=Hello%20ChocoVilla%2C%20I%20would%20like%20to%20know%20about%20available%20products."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-primary-gold text-primary-dark font-semibold px-8 py-3 rounded-full hover:bg-yellow-500 transition-all duration-300"
+            >
+              Contact Us on WhatsApp
+            </a>
+          </div>
+        </section>
+      )}
 
-          {/* Empty State */}
-          {!error && products.length === 0 && (
-            <div className="max-w-2xl mx-auto bg-primary-cream border border-primary-gold rounded-lg p-12 text-center">
-              <h3 className="text-2xl font-bold text-primary-brown mb-4">No Products Available</h3>
-              <p className="text-gray-600 mb-6">
-                We&apos;re updating our collection. Please check back soon!
-              </p>
-              <a
-                href="https://wa.me/919825947680?text=Hello%20ChocoVilla%2C%20I%20would%20like%20to%20know%20about%20available%20products."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-primary-gold text-primary-dark font-semibold px-8 py-3 rounded-full hover:bg-yellow-500 transition-all duration-300"
-              >
-                Contact Us on WhatsApp
-              </a>
-            </div>
-          )}
-
-          {/* Products Grid */}
-          {!error && products.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+      {/* Products with Search and Filter */}
+      {!error && products.length > 0 && (
+        <ProductsClient initialProducts={products} />
+      )}
 
       {/* Info Banner */}
       <section className="py-12 px-4 bg-white">
@@ -92,7 +94,7 @@ export default async function Products() {
               How to Order
             </h3>
             <p className="text-gray-700 mb-4">
-              Simply click the &quot;Order Now&quot; button on any product to chat with us on WhatsApp. 
+              Simply click &quot;Order on WhatsApp&quot; on any product to chat with us. 
               We&apos;ll confirm your order details, arrange payment, and ensure fresh delivery to your doorstep.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center text-left">

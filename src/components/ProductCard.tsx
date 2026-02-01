@@ -7,8 +7,11 @@ interface Product {
   id: string;
   name: string;
   description: string;
-  price: number;
+  marketPrice: number;
+  ourPrice: number;
   imageUrl: string;
+  category: string;
+  bestSeller: boolean;
 }
 
 interface ProductCardProps {
@@ -19,7 +22,8 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [imageError, setImageError] = useState(false);
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   
-  const whatsappMessage = `Hello ChocoVilla, I am interested in ${product.name}. Please share details.`;
+  // WhatsApp message with product name and our price
+  const whatsappMessage = `Hello ChocoVilla, I am interested in ${product.name} priced at ₹${product.ourPrice}. Please share details.`;
   const whatsappUrl = `https://wa.me/919825947680?text=${encodeURIComponent(whatsappMessage)}`;
 
   // Fallback image if product image fails to load
@@ -35,6 +39,14 @@ export default function ProductCard({ product }: ProductCardProps) {
           onClick={() => setIsImageViewerOpen(true)}
           title="Click to view full image"
         >
+          {/* Best Seller Badge */}
+          {product.bestSeller && (
+            <div className="absolute top-3 left-3 z-10 bg-gradient-to-r from-primary-gold to-yellow-500 text-primary-dark px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 text-sm font-bold animate-pulse">
+              <span className="text-base">⭐</span>
+              <span>Best Seller</span>
+            </div>
+          )}
+
           {product.imageUrl && !imageError ? (
             <Image
               src={product.imageUrl}
@@ -66,17 +78,31 @@ export default function ProductCard({ product }: ProductCardProps) {
           <h3 className="text-xl font-bold text-primary-brown mb-2">{product.name}</h3>
           <p className="text-gray-600 mb-4 line-clamp-2">{product.description}</p>
           
-          <div className="flex justify-between items-center">
-            <span className="text-2xl font-bold text-primary-gold">₹{product.price}</span>
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-primary-gold text-primary-dark font-semibold px-6 py-2 rounded-full hover:bg-yellow-500 transition-all duration-300 hover:scale-105 transform shadow-md"
-            >
-              Order Now
-            </a>
+          {/* Pricing Section */}
+          <div className="mb-4">
+            {product.marketPrice > 0 && (
+              <div className="text-sm text-gray-400 line-through mb-1">
+                ₹{product.marketPrice}
+              </div>
+            )}
+            <div className="text-2xl font-bold text-primary-gold">
+              ₹{product.ourPrice}
+            </div>
+            {product.marketPrice > 0 && product.marketPrice > product.ourPrice && (
+              <div className="text-sm text-green-600 font-semibold mt-1">
+                Save ₹{(product.marketPrice - product.ourPrice).toFixed(0)}
+              </div>
+            )}
           </div>
+          
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full text-center bg-primary-gold text-primary-dark font-semibold px-6 py-3 rounded-full hover:bg-yellow-500 transition-all duration-300 hover:scale-105 transform shadow-md"
+          >
+            Order on WhatsApp
+          </a>
         </div>
       </div>
 

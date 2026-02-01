@@ -1,0 +1,43 @@
+<svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="500" height="500" fill="#5C4A2F"/>
+  <g transform="translate(100, 50)">
+    <!-- Outer arch frame -->
+    <path d="M 150 10 Q 250 10 290 50 Q 300 70 300 100 L 300 350 Q 300 380 280 400 L 20 400 Q 0 380 0 350 L 0 100 Q 0 70 10 50 Q 50 10 150 10 Z" 
+          stroke="#FFFFFF" stroke-width="4" fill="none"/>
+    <path d="M 150 20 Q 245 20 280 55 Q 290 75 290 100 L 290 350 Q 290 375 275 390 L 25 390 Q 10 375 10 350 L 10 100 Q 10 75 20 55 Q 55 20 150 20 Z" 
+          stroke="#FFFFFF" stroke-width="3" fill="none"/>
+    
+    <!-- Cacao pod and leaves illustration -->
+    <g transform="translate(90, 50)">
+      <!-- Cacao pod -->
+      <ellipse cx="60" cy="80" rx="25" ry="40" stroke="#FFFFFF" stroke-width="2" fill="none"/>
+      <path d="M 60 40 Q 55 45 60 50 Q 65 45 60 40 Z" stroke="#FFFFFF" stroke-width="2" fill="none"/>
+      <line x1="45" y1="60" x2="75" y2="60" stroke="#FFFFFF" stroke-width="1.5"/>
+      <line x1="45" y1="75" x2="75" y2="75" stroke="#FFFFFF" stroke-width="1.5"/>
+      <line x1="45" y1="90" x2="75" y2="90" stroke="#FFFFFF" stroke-width="1.5"/>
+      <line x1="45" y1="105" x2="75" y2="105" stroke="#FFFFFF" stroke-width="1.5"/>
+      
+      <!-- Leaves -->
+      <path d="M 60 40 Q 40 20 20 30 Q 15 40 20 50 Q 40 55 60 40" stroke="#FFFFFF" stroke-width="2" fill="none"/>
+      <path d="M 60 40 Q 80 15 100 20 Q 110 30 105 45 Q 85 55 60 40" stroke="#FFFFFF" stroke-width="2" fill="none"/>
+      <path d="M 35 45 Q 30 35 35 30" stroke="#FFFFFF" stroke-width="1.5" fill="none"/>
+      <path d="M 85 35 Q 90 28 95 30" stroke="#FFFFFF" stroke-width="1.5" fill="none"/>
+    </g>
+    
+    <!-- Decorative stars -->
+    <path d="M 30 190 L 32 192 L 30 194 L 28 192 Z" fill="#FFFFFF"/>
+    <path d="M 270 190 L 272 192 L 270 194 L 268 192 Z" fill="#FFFFFF"/>
+    
+    <!-- Text: PREMIUM -->
+    <text x="150" y="220" font-family="serif" font-size="42" font-weight="bold" fill="#FFFFFF" text-anchor="middle" letter-spacing="8">PREMIUM</text>
+    
+    <!-- Text: CHOCOLATE -->
+    <text x="150" y="270" font-family="serif" font-size="48" font-weight="bold" fill="#FFFFFF" text-anchor="middle" letter-spacing="6">CHOCOLATE</text>
+    
+    <!-- Divider line -->
+    <line x1="70" y1="290" x2="230" y2="290" stroke="#FFFFFF" stroke-width="1"/>
+    
+    <!-- Text: BY CHOCO VILLA -->
+    <text x="150" y="320" font-family="sans-serif" font-size="16" fill="#FFFFFF" text-anchor="middle" letter-spacing="4">BY CHOCO VILLA</text>
+  </g>
+</svg>
