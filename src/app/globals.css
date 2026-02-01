@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-geist-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+  @apply bg-white text-gray-900;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary-brown rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary-dark;
+}
+
+/* Smooth animations */
+* {
+  @apply transition-colors duration-300;
+}
+
+/* Custom utilities */
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-gold via-yellow-500 to-primary-gold bg-clip-text text-transparent;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-gold text-primary-dark font-semibold px-8 py-3 rounded-full hover:bg-yellow-500 hover:scale-105 transform transition-all duration-300 shadow-lg;
+  }
+  
+  .btn-secondary {
+    @apply bg-primary-brown text-white font-semibold px-8 py-3 rounded-full hover:bg-primary-dark hover:scale-105 transform transition-all duration-300 shadow-lg;
+  }
+}
