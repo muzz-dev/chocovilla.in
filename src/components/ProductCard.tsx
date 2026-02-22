@@ -62,16 +62,16 @@ Please notify me when ${product.name} is back in stock.`;
 
   return (
     <>
-      <div className={`group bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 ${!product.inStock ? 'opacity-75 cursor-not-allowed' : ''}`}>
+      <div className={`group bg-white rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-gray-100 ${!product.inStock ? 'opacity-75 cursor-not-allowed' : ''}`}>
         {/* Product Image */}
-        <div 
-          className={`relative h-64 bg-gray-200 overflow-hidden ${product.inStock ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+        <div
+          className={`relative h-80 bg-primary-cream overflow-hidden ${product.inStock ? 'cursor-pointer' : 'cursor-not-allowed'}`}
           onClick={() => product.inStock && setIsImageViewerOpen(true)}
           title={product.inStock ? "Click to view full image" : "Product out of stock"}
         >
           {/* Best Seller Badge */}
           {product.bestSeller && (
-            <div className="absolute top-3 left-3 z-10 bg-gradient-to-r from-primary-gold to-yellow-500 text-primary-dark px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 text-sm font-bold animate-pulse">
+            <div className="absolute top-4 left-4 z-10 bg-gradient-to-r from-primary-gold to-yellow-600 text-primary-brown px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm font-bold">
               <span className="text-base">⭐</span>
               <span>Best Seller</span>
             </div>
@@ -79,7 +79,7 @@ Please notify me when ${product.name} is back in stock.`;
 
           {/* Limited Stock Badge */}
           {product.limitedStock && product.inStock && (
-            <div className="absolute top-3 right-3 z-10 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1.5 text-sm font-bold">
+            <div className="absolute top-4 right-4 z-10 bg-gradient-to-r from-red-100 to-red-200 text-red-800 px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm font-semibold border border-red-300">
               <span className="text-base">⏳</span>
               <span>Limited Stock</span>
             </div>
@@ -87,8 +87,8 @@ Please notify me when ${product.name} is back in stock.`;
 
           {/* Out of Stock Badge */}
           {!product.inStock && (
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-              <div className="bg-red-600 text-white px-4 py-2 rounded-lg font-bold text-lg shadow-lg">
+            <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center z-20">
+              <div className="bg-primary-brown text-white px-6 py-3 rounded-lg font-bold text-lg shadow-xl border-2 border-primary-gold">
                 OUT OF STOCK
               </div>
             </div>
@@ -121,33 +121,34 @@ Please notify me when ${product.name} is back in stock.`;
         </div>
 
         {/* Product Details */}
-        <div className="p-6">
-          <h3 className="text-xl font-bold text-primary-brown mb-2">{product.name}</h3>
-          <p className="text-gray-600 mb-4 line-clamp-2">{product.description}</p>
-          
+        <div className="p-8 bg-gradient-to-b from-white to-primary-cream/30">
+          <h3 className="text-2xl font-serif font-bold text-primary-brown mb-3 leading-tight">{product.name}</h3>
+          <p className="text-amber-700 mb-6 line-clamp-2 leading-relaxed text-sm font-medium">{product.description}</p>
+
           {/* Pricing Section */}
-          <div className="mb-4">
+          <div className="mb-6">
             {product.marketPrice > 0 && (
-              <div className="text-sm text-gray-400 line-through mb-1">
-                ₹{product.marketPrice}
+              <div className="text-lg text-primary-beige line-through mb-2 font-light">
+                ₹{product.marketPrice.toLocaleString()}
               </div>
             )}
-            <div className="text-2xl font-bold text-primary-gold">
-              ₹{product.ourPrice}
+            <div className="text-3xl font-bold text-primary-gold mb-2">
+              ₹{product.ourPrice.toLocaleString()}
             </div>
             {product.marketPrice > 0 && product.marketPrice > product.ourPrice && (
-              <div className="text-sm text-green-600 font-semibold mt-1">
-                Save ₹{(product.marketPrice - product.ourPrice).toFixed(0)}
+              <div className="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold border border-green-200">
+                Save ₹{(product.marketPrice - product.ourPrice).toLocaleString()}
               </div>
             )}
           </div>
-          
-          <div className="flex gap-3">
+
+          {/* Action Buttons */}
+          <div className="flex gap-4">
             {product.inStock ? (
               <>
                 <button
                   onClick={handleAddToCart}
-                  className="flex-1 px-4 py-3 rounded-full font-semibold transition-all duration-300 transform bg-primary-brown text-white hover:bg-primary-dark hover:scale-105 shadow-md"
+                  className="flex-1 px-6 py-4 rounded-xl font-semibold transition-all duration-300 transform bg-primary-brown text-white hover:bg-primary-dark hover:scale-105 shadow-lg hover:shadow-xl border-2 border-primary-brown hover:border-primary-gold"
                   aria-label={`Add ${product.name} to cart`}
                 >
                   Add to Cart
@@ -156,7 +157,7 @@ Please notify me when ${product.name} is back in stock.`;
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 text-center px-4 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 transform shadow-md bg-primary-gold text-primary-dark hover:bg-yellow-500"
+                  className="flex-1 text-center px-6 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 transform shadow-lg hover:shadow-xl bg-primary-gold text-primary-brown hover:bg-yellow-400 border-2 border-primary-gold"
                   aria-label={`Order ${product.name} on WhatsApp`}
                 >
                   Order Now
@@ -167,7 +168,7 @@ Please notify me when ${product.name} is back in stock.`;
                 href={notifyWhatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full text-center px-4 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 transform shadow-md bg-green-600 text-white hover:bg-green-700"
+                className="w-full text-center px-6 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 transform shadow-lg hover:shadow-xl bg-green-600 text-white hover:bg-green-700 border-2 border-green-600"
                 aria-label={`Get notified when ${product.name} is back in stock`}
               >
                 📱 Notify me when available

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Inter, Playfair_Display, Cinzel } from 'next/font/google';
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -8,20 +9,39 @@ import { CartProvider } from "@/contexts/CartContext";
 import { ToastProvider } from "@/contexts/ToastContext";
 import ToastContainer from "@/components/ToastContainer";
 
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
+  display: 'swap',
+});
+
+const cinzel = Cinzel({
+  subsets: ['latin'],
+  variable: '--font-cinzel',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
   title: "ChocoVilla - Premium, Imported & International Chocolates",
-  description: "Shop premium, imported and international chocolates including gift hampers and best sellers. Order directly on WhatsApp from ChocoVilla.",
+  description: "Shop premium, imported and international chocolates, luxury gift hampers and best sellers at ChocoVilla. Order chocolates easily on WhatsApp.",
   keywords: [
-    "premium chocolate",
-    "imported chocolate",
-    "international chocolate",
-    "luxury chocolate",
-    "artisan chocolate",
-    "handcrafted chocolate",
-    "premium chocolate online",
-    "imported chocolate India",
-    "international chocolate brands",
-    "best premium chocolate",
+    "premium chocolates",
+    "imported chocolates",
+    "international chocolates",
+    "luxury chocolates",
+    "chocolate gift hampers",
+    "buy imported chocolates online",
+    "order premium chocolates online",
+    "luxury chocolate gift boxes",
+    "best chocolates for gifting",
+    "premium chocolates in India",
+    "premium chocolates in Surat",
     "gourmet chocolate",
     "chocolate gift boxes",
     "dark chocolate premium",
@@ -48,8 +68,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "ChocoVilla - Premium Chocolate | Imported & International Chocolates",
-    description: "Buy premium, imported & international chocolates online at ChocoVilla",
+    title: "ChocoVilla - Premium, Imported & International Chocolates",
+    description: "Shop premium, imported and international chocolates, luxury gift hampers and best sellers at ChocoVilla. Order chocolates easily on WhatsApp.",
   },
 };
 
@@ -60,7 +80,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">
+      <body className={`${inter.variable} ${playfair.variable} ${cinzel.variable} antialiased font-sans`}>
         <ToastProvider>
           <CartProvider>
             <Navbar />

@@ -15,7 +15,7 @@ export default function Navbar() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="bg-gradient-to-r from-[#3d2817] via-[#5C4A2F] to-[#3d2817] text-white shadow-2xl sticky top-0 z-50 backdrop-blur-md bg-opacity-95 border-b border-primary-gold/20">
+    <nav className="bg-gradient-to-r from-primary-brown via-primary-dark to-primary-brown text-white shadow-2xl sticky top-0 z-50 backdrop-blur-md bg-opacity-95 border-b border-primary-gold/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo & Brand */}
